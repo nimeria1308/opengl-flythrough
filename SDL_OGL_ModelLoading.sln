@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL_OGL_ModelLoading", "SDL_OGL_ModelLoading.vcxproj", "{8F0E2C50-2879-482C-81D7-2C087B514615}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Debug|x64.ActiveCfg = Debug|x64
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Debug|x64.Build.0 = Debug|x64
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Debug|x86.ActiveCfg = Debug|Win32
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Debug|x86.Build.0 = Debug|Win32
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Release|x64.ActiveCfg = Release|x64
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Release|x64.Build.0 = Release|x64
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Release|x86.ActiveCfg = Release|Win32
+		{8F0E2C50-2879-482C-81D7-2C087B514615}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79026935-BA88-4995-B44C-61E7D17EE720}
+	EndGlobalSection
+EndGlobal
