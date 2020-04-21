@@ -1,5 +1,4 @@
-#include "stdafx.h"
-
+#define GLEW_STATIC
 #include <GL\glew.h>
 
 #include <SDL.h>
@@ -220,7 +219,7 @@ bool initGL()
 	if (error != GL_NO_ERROR)
 	{
 		success = false;
-		printf("Error initializing OpenGL! %s\n", gluErrorString(error));
+		printf("Error initializing OpenGL!\n");
 	}
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
