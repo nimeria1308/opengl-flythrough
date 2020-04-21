@@ -18,7 +18,7 @@
 
 bool init();
 bool initGL();
-void render();
+void render(Model& model, const glm::vec3 translate, const glm::vec3 scale);
 GLuint CreateCube(float, GLuint&, GLuint&);
 void DrawCube(GLuint id);
 void close();
@@ -31,6 +31,7 @@ SDL_GLContext gContext;
 
 Shader gShader;
 Model gModel;
+Model gModel2;
 
 GLuint gVAO, gVBO, gEBO;
 
@@ -100,7 +101,11 @@ int main(int argc, char* args[])
 		}
 
 		//Render
-		render();
+		//Clear color buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		render(gModel, glm::vec3(-1.0f, -0.5f, 0.0f),  glm::vec3(0.22f));
+		render(gModel2, glm::vec3(1.0f, -0.5f, 0.0f), glm::vec3(0.0025f));
 
 		//Update screen
 		SDL_GL_SwapWindow(gWindow);
@@ -230,8 +235,10 @@ bool initGL()
 
 	gShader.Load("./shaders/vertex.vert", "./shaders/fragment.frag");
 
+	gModel.LoadModel("./models/nanosuit/nanosuit.obj");
+
 	// https://free3d.com/3d-model/091_aya-3dsmax-2020-189298.html
-	gModel.LoadModel("./models/aya/091_W_Aya_30K.obj");
+	gModel2.LoadModel("./models/aya/091_W_Aya_30K.obj");
 
 	gVAO = CreateCube(1.0f, gVBO, gEBO);
 
@@ -257,14 +264,11 @@ void close()
 	SDL_Quit();
 }
 
-void render()
+void render(Model &gfxModel, const glm::vec3 translate, const glm::vec3 scale)
 {
-	//Clear color buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
+	model = glm::translate(model, translate);
+	model = glm::scale(model, scale);
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 100.0f);
@@ -282,7 +286,7 @@ void render()
 	gShader.setVec3("light.position", lightPos);
 	gShader.setVec3("viewPos", camera.Position);
 
-	gModel.Draw(gShader);
+	gfxModel.Draw(gShader);
 
 //	DrawCube(gVAO);
 }
