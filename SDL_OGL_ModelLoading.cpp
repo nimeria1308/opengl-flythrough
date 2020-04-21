@@ -230,8 +230,8 @@ bool initGL()
 
 	gShader.Load("./shaders/vertex.vert", "./shaders/fragment.frag");
 
-//	gModel.LoadModel("./models/casa/casa moderna.obj");
-	gModel.LoadModel("./models/nanosuit/nanosuit.obj");
+	// https://free3d.com/3d-model/091_aya-3dsmax-2020-189298.html
+	gModel.LoadModel("./models/aya/091_W_Aya_30K.obj");
 
 	gVAO = CreateCube(1.0f, gVBO, gEBO);
 
@@ -263,12 +263,8 @@ void render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 model = glm::mat4(1.0f);
-//	model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0, 0, 1));
 	model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-	//depending on the model size, the model may have to be scaled up or down to be visible
-//  model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
-	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-//	model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+	model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 100.0f);
