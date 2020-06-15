@@ -38,6 +38,9 @@
     <ClCompile Include="SDL_OGL_ModelLoading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SDL_OGL_Heightmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -51,6 +54,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="shaders\model.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\heightmap.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\heightmap.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

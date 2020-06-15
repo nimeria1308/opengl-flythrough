@@ -148,10 +148,13 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SDL_OGL_Heightmap.cpp" />
     <ClCompile Include="SDL_OGL_ModelLoading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="shaders\heightmap.frag" />
+    <None Include="shaders\heightmap.vert" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
     <None Include="shaders\model.frag" />
