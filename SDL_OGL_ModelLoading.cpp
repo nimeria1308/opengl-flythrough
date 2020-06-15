@@ -233,7 +233,7 @@ bool initGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	gShader.Load("./shaders/vertex.vert", "./shaders/fragment.frag");
+	gShader.Load("./shaders/model.vert", "./shaders/model.frag");
 
 	gModel.LoadModel("./models/nanosuit/nanosuit.obj");
 
