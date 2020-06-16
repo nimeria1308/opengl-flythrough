@@ -39,7 +39,7 @@ GLuint gVAO, gVBO, gEBO;
 GLuint texID;
 GLuint texID2;
 //resolution = number of vertices per axis
-int xRes = 500, zRes = 500; //y axis is for height
+int xRes = 1024, zRes = 1024; //y axis is for height
 float step = 1.0f; //the step between the vertices
 
 // camera
@@ -75,7 +75,7 @@ int main(int argc, char* args[])
 		// per-frame time logic
 		// --------------------
 		float currentFrame = SDL_GetTicks() / 1000.0f;
-		deltaTime = currentFrame - lastFrame;
+		deltaTime = (currentFrame - lastFrame) * 10;
 		lastFrame = currentFrame;
 
 		//Handle events on queue
@@ -192,7 +192,7 @@ bool init()
 
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
+		gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN /*| SDL_WINDOW_FULLSCREEN*/);
 		if (gWindow == NULL)
 		{
@@ -256,12 +256,12 @@ bool initGL()
 	gShader.setInt("heightmap", 0); //set the heightmap uniform sampler to read from GL_TEXTURE0
 	gShader.setInt("heightcolor", 1);
 	
-	if (!LoadTexture("./textures/height.jpg", texID))
+	if (!LoadTexture("./textures/greenland_HF.jpg", texID))
 	{
 		printf("Unable to load heighmap image!\n");
 	}
 
-	if (!LoadTexture("./textures/height_color.jpg", texID2))
+	if (!LoadTexture("./textures/greenland_TX.jpg", texID2))
 	{
 		printf("Unable to load heighmap image!\n");
 	}
@@ -297,7 +297,7 @@ void render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 500.0f);
 	glm::mat4 model = glm::mat4(1);
 	//model = glm::translate(model, glm::vec3(-xRes / 2.0f, 0, 0));
 	model = glm::translate(model, glm::vec3(0, -10.0f, 0));

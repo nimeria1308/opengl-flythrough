@@ -20,7 +20,7 @@ void main()
 	//todo: get the height (y) from the texture
 	//eventually add a coefficient for the height (otherwise it will be between [0;1])
 	float height = texture(heightmap, tex).r;
-	vec3 pos = vec3(aPos.x, height * 10, aPos.z);
+	vec3 pos = vec3(aPos.x, height * 200, aPos.z);
     
     gl_Position = proj * view * model * vec4(pos, 1.0);
 }
