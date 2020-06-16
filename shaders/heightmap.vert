@@ -16,10 +16,11 @@ void main()
 {
 	//todo: calculate the correct texture coordinate for the vertex
 	//take care - if the step between the vertices is not 1
-	tex = vec2(0,0);
+	tex = vec2(aPos.x / width, aPos.z / length);
 	//todo: get the height (y) from the texture
 	//eventually add a coefficient for the height (otherwise it will be between [0;1])
-	vec3 pos = vec3(aPos.x, 0, aPos.z);
+	float height = texture(heightmap, tex).r;
+	vec3 pos = vec3(aPos.x, height * 10, aPos.z);
     
     gl_Position = proj * view * model * vec4(pos, 1.0);
 }

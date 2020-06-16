@@ -1,3 +1,4 @@
+#if 0
 #define GLEW_STATIC
 #include <GL\glew.h>
 
@@ -347,5 +348,4 @@ void DrawCube(GLuint vaoID)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
-
-
+#endif

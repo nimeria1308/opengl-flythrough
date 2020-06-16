@@ -1,3 +1,4 @@
+#if 1
 #define GLEW_STATIC
 #include <GL\glew.h>
 
@@ -36,12 +37,13 @@ Shader gShader;
 GLuint gVAO, gVBO, gEBO;
 
 GLuint texID;
+GLuint texID2;
 //resolution = number of vertices per axis
-int xRes = 50, zRes = 50; //y axis is for height
+int xRes = 500, zRes = 500; //y axis is for height
 float step = 1.0f; //the step between the vertices
 
 // camera
-Camera camera(glm::vec3(0.0f, 10.0f, 20.0f));
+Camera camera(glm::vec3(0.0f, 4.0f, 20.0f), glm::vec3(0, 1, 0), -80, -20);
 float lastX = -1;
 float lastY = -1;
 bool firstMouse = true;
@@ -238,7 +240,7 @@ bool initGL()
 	if (error != GL_NO_ERROR)
 	{
 		success = false;
-		printf("Error initializing OpenGL! %s\n", gluErrorString(error));
+		printf("Error initializing OpenGL! %d\n", error);
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -247,13 +249,19 @@ bool initGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	gShader.Load("./shaders/vertex.vert", "./shaders/fragment.frag");
+	gShader.Load("./shaders/heightmap.vert", "./shaders/heightmap.frag");
 	gShader.use();
 	gShader.setFloat("width", xRes);
 	gShader.setFloat("length", zRes);
 	gShader.setInt("heightmap", 0); //set the heightmap uniform sampler to read from GL_TEXTURE0
+	gShader.setInt("heightcolor", 1);
 	
-	if (!LoadTexture("./images/height.jpg", texID))
+	if (!LoadTexture("./textures/height.jpg", texID))
+	{
+		printf("Unable to load heighmap image!\n");
+	}
+
+	if (!LoadTexture("./textures/height_color.jpg", texID2))
 	{
 		printf("Unable to load heighmap image!\n");
 	}
@@ -291,7 +299,9 @@ void render()
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 100.0f);
 	glm::mat4 model = glm::mat4(1);
-	model = glm::translate(model, glm::vec3(-xRes / 2.0f, 0, 0));
+	//model = glm::translate(model, glm::vec3(-xRes / 2.0f, 0, 0));
+	model = glm::translate(model, glm::vec3(0, -10.0f, 0));
+	model = glm::scale(model, glm::vec3(0.1));
 
 	glUseProgram(gShader.ID);
 
@@ -302,6 +312,9 @@ void render()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texID2);
+
 	DrawPlane(gVAO);
 }
 
@@ -311,9 +324,33 @@ GLuint CreatePlane(GLuint& VBO, GLuint& EBO)
 	float *vertices = new float[xRes * zRes * 3];
 	//todo: add code to generate the vertices using xRes, zRes and step (global variables)
 
+	int i = 0;
+	for (int row = 0; row < zRes; row++) {
+		for (int col = 0; col < zRes; col++) {
+			vertices[i++] = (float)col;
+			vertices[i++] = 0.0f;
+			vertices[i++] = (float)row;
+		}
+	}
+
 	//generate the indices to draw the plane with triangle strips using multiple glDrawElements calls, see DrawPlane
 	int* indices = new int[xRes * 2 * (zRes - 1)];
+	i = 0;
 	//todo: add code to generate the indices to build triangle strips from the vertices
+	for (int row = 0; row < zRes - 1; row++) {
+		if ((row & 1) == 0) { // even rows
+			for (int col = 0; col < xRes; col++) {
+				indices[i++] = col + row * xRes;
+				indices[i++] = col + (row + 1) * xRes;
+			}
+		}
+		else { // odd rows
+			for (int col = xRes - 1; col > 0; col--) {
+				indices[i++] = col + (row + 1) * xRes;
+				indices[i++] = col - 1 + +row * xRes;
+			}
+		}
+	}
 
 	GLuint VAO;
 	glGenBuffers(1, &VBO);
@@ -358,6 +395,7 @@ void DrawPlane(GLuint vaoID)
 	{
 		glDrawElements(GL_TRIANGLE_STRIP, xRes * 2, GL_UNSIGNED_INT, (void*)(z*xRes*2*sizeof(int)));
 	}
+
 	//this uses multiple glDrawElements calls
 	//another option is to use degenerate triangles - see http://www.learnopengles.com/tag/triangle-strips/
 
@@ -405,3 +443,4 @@ bool LoadTexture(const char* filename, GLuint& texID)
 
 	return true;
 }
+#endif
