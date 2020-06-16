@@ -110,6 +110,13 @@ int main(int argc, char* args[])
 					HandleKeyDown(e.key);
 				}
 				break;
+			case SDL_WINDOWEVENT:
+				switch (e.window.event) {
+				case SDL_WINDOWEVENT_ENTER:
+					firstMouse = true;
+					break;
+				}
+				break;
 			case SDL_MOUSEMOTION:
 				HandleMouseMotion(e.motion);
 				break;
