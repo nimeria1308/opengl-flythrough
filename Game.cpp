@@ -117,19 +117,19 @@ void Game::loop()
 					return;
 
 				case SDLK_w:
-					camera.ProcessKeyboard(FORWARD, deltaTime);
+					camera.processKeyboard(FORWARD, deltaTime);
 					break;
 
 				case SDLK_s:
-					camera.ProcessKeyboard(BACKWARD, deltaTime);
+					camera.processKeyboard(BACKWARD, deltaTime);
 					break;
 
 				case SDLK_a:
-					camera.ProcessKeyboard(LEFT, deltaTime);
+					camera.processKeyboard(LEFT, deltaTime);
 					break;
 
 				case SDLK_d:
-					camera.ProcessKeyboard(RIGHT, deltaTime);
+					camera.processKeyboard(RIGHT, deltaTime);
 					break;
 				}
 
@@ -140,7 +140,7 @@ void Game::loop()
 			{
 				if (!firstMouse)
 				{
-					camera.ProcessMouseMovement(e.motion.x - lastX, lastY - e.motion.y);
+					camera.processMouseMovement(e.motion.x - lastX, lastY - e.motion.y);
 				}
 
 				lastX = e.motion.x;
@@ -150,7 +150,7 @@ void Game::loop()
 			}
 
 			case SDL_MOUSEWHEEL:
-				camera.ProcessMouseScroll(e.wheel.y);
+				camera.processMouseScroll(e.wheel.y);
 				break;
 			}
 
