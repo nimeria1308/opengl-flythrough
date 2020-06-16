@@ -333,7 +333,7 @@ void render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
+	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 1280.0f / 720, 0.1f, 1000.0f);
 	
 	// render the terrain
 	glm::mat4 model = glm::mat4(1);
