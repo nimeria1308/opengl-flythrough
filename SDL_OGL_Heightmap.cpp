@@ -50,7 +50,9 @@ int xRes = 1024, zRes = 1024; //y axis is for height
 float step = 1.0f; //the step between the vertices
 
 // camera
-Camera camera(glm::vec3(0.0f, 4.0f, 20.0f), glm::vec3(0, 1, 0), -80, -20);
+//Camera camera(glm::vec3(0.0f, 20.0f, 20.0f), glm::vec3(0, 1, 0), -80, -20);
+//Camera camera(glm::vec3(12, 75, 84), glm::vec3(0, 1, 0), -40, -55);
+Camera camera(glm::vec3(12, 75, 84)-glm::vec3(1024.0f/20), glm::vec3(0, 1, 0), -40, -55);
 float lastX = -1;
 float lastY = -1;
 bool firstMouse = true;
@@ -318,15 +320,17 @@ void close()
 
 void render()
 {
+	//std::cout << "(" << camera.Position.x << ", " << camera.Position.y << ", " << camera.Position.z << "), "
+	//	<< camera.Yaw << ", " << camera.Pitch << std::endl;
 	//Clear color buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 500.0f);
+	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 1000.0f);
 	
 	// render the terrain
 	glm::mat4 model = glm::mat4(1);
-	//model = glm::translate(model, glm::vec3(0, -10.0f, 0));
+	model = glm::translate(model, glm::vec3(-1024.0f/20));
 	model = glm::scale(model, glm::vec3(0.1));
 
 	glUseProgram(gShader.ID);
@@ -345,7 +349,8 @@ void render()
 	glUseProgram(gShaderSky.ID);
 
 	model = glm::mat4(1);
-	model = glm::scale(model, glm::vec3(124));
+	model = glm::scale(model, glm::vec3(1024.0f / 2));
+	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
 	gShaderSky.setMat4("view", view);
 	gShaderSky.setMat4("proj", proj);
 	gShaderSky.setMat4("model", model);
