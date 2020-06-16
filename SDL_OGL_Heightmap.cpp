@@ -22,8 +22,11 @@
 bool init();
 bool initGL();
 void render();
+unsigned int createCubemap(std::vector<std::string> faces);
 GLuint CreatePlane(GLuint&, GLuint&);
-void DrawPlane(GLuint id);
+GLuint CreateBox(GLuint& VBO);
+void DrawPlane(GLuint vaoID);
+void DrawSkybox(GLuint vaoID);
 void close();
 
 //The window we'll be rendering to
@@ -33,11 +36,15 @@ SDL_Window* gWindow = NULL;
 SDL_GLContext gContext;
 
 Shader gShader;
+Shader gShaderSky;
 
 GLuint gVAO, gVBO, gEBO;
+GLuint gVAOSky, gVBOSky;
 
 GLuint texID;
 GLuint texID2;
+GLuint skyboxTexID;
+
 //resolution = number of vertices per axis
 int xRes = 1024, zRes = 1024; //y axis is for height
 float step = 1.0f; //the step between the vertices
@@ -249,6 +256,7 @@ bool initGL()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// Load stuff for terrain
 	gShader.Load("./shaders/heightmap.vert", "./shaders/heightmap.frag");
 	gShader.use();
 	gShader.setFloat("width", xRes);
@@ -267,6 +275,23 @@ bool initGL()
 	}
 
 	gVAO = CreatePlane(gVBO, gEBO);
+
+	// Load stuff for skybox
+	gShaderSky.Load("./shaders/skybox.vert", "./shaders/skybox.frag");
+	gShaderSky.use();
+	gShaderSky.setInt("skybox", 0); //set the heightmap uniform sampler to read from GL_TEXTURE0
+
+	std::vector<std::string> faces =
+	{
+		"./textures/right.jpg",
+		"./textures/left.jpg",
+		"./textures/top.jpg",
+		"./textures/bottom.jpg",
+		"./textures/front.jpg",
+		"./textures/back.jpg"
+	};
+	skyboxTexID = createCubemap(faces);
+	gVAOSky = CreateBox(gVBOSky);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //other modes GL_FILL, GL_POINT
 
@@ -298,9 +323,10 @@ void render()
 
 	glm::mat4 view = camera.GetViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), 4.0f / 3.0f, 0.1f, 500.0f);
+	
+	// render the terrain
 	glm::mat4 model = glm::mat4(1);
-	//model = glm::translate(model, glm::vec3(-xRes / 2.0f, 0, 0));
-	model = glm::translate(model, glm::vec3(0, -10.0f, 0));
+	//model = glm::translate(model, glm::vec3(0, -10.0f, 0));
 	model = glm::scale(model, glm::vec3(0.1));
 
 	glUseProgram(gShader.ID);
@@ -314,16 +340,58 @@ void render()
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texID2);
-
 	DrawPlane(gVAO);
+
+	glUseProgram(gShaderSky.ID);
+
+	model = glm::mat4(1);
+	model = glm::scale(model, glm::vec3(124));
+	gShaderSky.setMat4("view", view);
+	gShaderSky.setMat4("proj", proj);
+	gShaderSky.setMat4("model", model);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexID);
+	DrawSkybox(gVAOSky);
+}
+
+unsigned int createCubemap(std::vector<std::string> faces)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		stbi_set_flip_vertically_on_load(false); //flip the image vertically while loading
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+			);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
 }
 
 GLuint CreatePlane(GLuint& VBO, GLuint& EBO)
 {
 	//procedurally generate vertices for a plane
 	float *vertices = new float[xRes * zRes * 3];
-	//todo: add code to generate the vertices using xRes, zRes and step (global variables)
-
 	int i = 0;
 	for (int row = 0; row < zRes; row++) {
 		for (int col = 0; col < zRes; col++) {
@@ -336,7 +404,6 @@ GLuint CreatePlane(GLuint& VBO, GLuint& EBO)
 	//generate the indices to draw the plane with triangle strips using multiple glDrawElements calls, see DrawPlane
 	int* indices = new int[xRes * 2 * (zRes - 1)];
 	i = 0;
-	//todo: add code to generate the indices to build triangle strips from the vertices
 	for (int row = 0; row < zRes - 1; row++) {
 		if ((row & 1) == 0) { // even rows
 			for (int col = 0; col < xRes; col++) {
@@ -383,6 +450,77 @@ GLuint CreatePlane(GLuint& VBO, GLuint& EBO)
 	return VAO;
 }
 
+GLuint CreateBox(GLuint& VBO)
+{
+	float skyboxVertices[] = {
+		// positions
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	GLuint VAO;
+	glGenBuffers(1, &VBO);
+	glGenVertexArrays(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 36 * 3 * sizeof(float), skyboxVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); //the data comes from the currently bound GL_ARRAY_BUFFER
+	glEnableVertexAttribArray(0);
+
+	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+	glBindVertexArray(0);
+
+	//the elements buffer must be unbound after the vertex array otherwise the vertex array will not have an associated elements buffer array
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	return VAO;
+}
+
 void DrawPlane(GLuint vaoID)
 {
 	gShader.use();
@@ -395,6 +533,19 @@ void DrawPlane(GLuint vaoID)
 	{
 		glDrawElements(GL_TRIANGLE_STRIP, xRes * 2, GL_UNSIGNED_INT, (void*)(z*xRes*2*sizeof(int)));
 	}
+
+	//this uses multiple glDrawElements calls
+	//another option is to use degenerate triangles - see http://www.learnopengles.com/tag/triangle-strips/
+
+	glBindVertexArray(0);
+}
+
+void DrawSkybox(GLuint vaoID)
+{
+	gShaderSky.use();
+	glBindVertexArray(vaoID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexID);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	//this uses multiple glDrawElements calls
 	//another option is to use degenerate triangles - see http://www.learnopengles.com/tag/triangle-strips/

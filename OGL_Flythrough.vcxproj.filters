@@ -62,5 +62,11 @@
     <None Include="shaders\heightmap.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="shaders\skybox.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\skybox.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
