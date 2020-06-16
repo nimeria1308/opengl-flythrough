@@ -337,7 +337,7 @@ void render()
 	
 	// render the terrain
 	glm::mat4 model = glm::mat4(1);
-	model = glm::translate(model, glm::vec3(-1024.0f/20));
+	model = glm::translate(model, glm::vec3(-1024.0f / 20, 0, -1024.0f / 20));
 	model = glm::scale(model, glm::vec3(0.1));
 
 	glUseProgram(gShader.ID);
@@ -356,8 +356,7 @@ void render()
 	glUseProgram(gShaderSky.ID);
 
 	model = glm::mat4(1);
-	model = glm::scale(model, glm::vec3(1024.0f / 2));
-	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
+	model = glm::scale(model, glm::vec3(1024.0f / 20));
 	gShaderSky.setMat4("view", view);
 	gShaderSky.setMat4("proj", proj);
 	gShaderSky.setMat4("model", model);
