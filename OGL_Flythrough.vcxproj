@@ -143,17 +143,24 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="ComplexMesh.h" />
+    <ClInclude Include="ComplexModel.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComplexMesh.cpp" />
+    <ClCompile Include="ComplexModel.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SDL_OGL_Heightmap.cpp" />
     <ClCompile Include="SDL_OGL_ModelLoading.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

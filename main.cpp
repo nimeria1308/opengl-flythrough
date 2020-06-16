@@ -1,5 +1,8 @@
 #include <iostream>
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include "Shader.h"
 #include "Game.h"
 
 using namespace std;
