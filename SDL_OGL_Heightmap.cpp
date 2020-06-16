@@ -292,12 +292,12 @@ bool initGL()
 
 	std::vector<std::string> faces =
 	{
-		"./textures/right.jpg",
-		"./textures/left.jpg",
-		"./textures/top.jpg",
-		"./textures/bottom.jpg",
-		"./textures/front.jpg",
-		"./textures/back.jpg"
+		"./textures/right3.jpg",
+		"./textures/left3.jpg",
+		"./textures/top3.jpg",
+		"./textures/bottom3.jpg",
+		"./textures/front3.jpg",
+		"./textures/back3.jpg"
 	};
 	skyboxTexID = createCubemap(faces);
 	gVAOSky = CreateBox(gVBOSky);
