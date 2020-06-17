@@ -74,9 +74,9 @@ void PlaneModel::init()
 	delete[] indices;
 }
 
-void PlaneModel::render(const mat4& view, const mat4& proj)
+void PlaneModel::render(const mat4& view, const mat4& proj, const glm::vec3& camera)
 {
-	Model::render(view, proj);
+	Model::render(view, proj, camera);
 
 	glBindVertexArray(vao);
 

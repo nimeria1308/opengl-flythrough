@@ -36,6 +36,9 @@ ComplexModel::~ComplexModel()
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 void ComplexModel::init(string const& path)
 {
+	shader = shared_ptr<Shader>(new Shader("./shaders/model.vert", "./shaders/model.frag"));
+	shader->use();
+
 	// read file via ASSIMP
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
@@ -89,11 +92,14 @@ shared_ptr<ComplexMesh> ComplexModel::processMesh(aiMesh* mesh, const aiScene* s
 		vector.y = mesh->mVertices[i].y;
 		vector.z = mesh->mVertices[i].z;
 		vertex.Position = vector;
+
 		// normals
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.Normal = vector;
+		if (mesh->mNormals) {
+			vector.x = mesh->mNormals[i].x;
+			vector.y = mesh->mNormals[i].y;
+			vector.z = mesh->mNormals[i].z;
+			vertex.Normal = vector;
+		}
 		// texture coordinates
 		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
@@ -107,15 +113,19 @@ shared_ptr<ComplexMesh> ComplexModel::processMesh(aiMesh* mesh, const aiScene* s
 		else
 			vertex.TexCoords = vec2(0.0f, 0.0f);
 		// tangent
-		vector.x = mesh->mTangents[i].x;
-		vector.y = mesh->mTangents[i].y;
-		vector.z = mesh->mTangents[i].z;
-		vertex.Tangent = vector;
+		if (mesh->mTangents) {
+			vector.x = mesh->mTangents[i].x;
+			vector.y = mesh->mTangents[i].y;
+			vector.z = mesh->mTangents[i].z;
+			vertex.Tangent = vector;
+		}
 		// bitangent
-		vector.x = mesh->mBitangents[i].x;
-		vector.y = mesh->mBitangents[i].y;
-		vector.z = mesh->mBitangents[i].z;
-		vertex.Bitangent = vector;
+		if (mesh->mBitangents) {
+			vector.x = mesh->mBitangents[i].x;
+			vector.y = mesh->mBitangents[i].y;
+			vector.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = vector;
+		}
 		vertices.push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -188,8 +198,23 @@ vector<ComplexMeshTexture> ComplexModel::loadMaterialTextures(aiMaterial* mat, a
 }
 
 // draws the model, and thus all its meshes
-void ComplexModel::draw(Shader& shader)
+void ComplexModel::render(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& camera)
 {
+	Model::render(view, proj, camera);
+
+	// lighting: TODO, move out of here
+	glm::vec3 lightPos(100.2f, 100.0f, 200.0f);
+
+	mat3 normalMat = transpose(inverse(model));
+
+	shader->setMat3("normalMat", normalMat);
+
+	//lighting
+	shader->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+	shader->setVec3("light.position", lightPos);
+	shader->setVec3("viewPos", camera);
+
+
 	for (unsigned int i = 0; i < meshes.size(); i++)
-		meshes[i]->draw(shader);
+		meshes[i]->draw(*shader);
 }

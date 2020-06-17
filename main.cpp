@@ -5,6 +5,7 @@
 #include "HeightmapModel.h"
 #include "SkyboxModel.h"
 #include "WaterModel.h"
+#include "ComplexModel.h"
 
 using namespace std;
 using namespace glm;
@@ -12,9 +13,7 @@ using namespace glm;
 int main(int argc, char* args[])
 {
 	Game game(1280, 720);
-	//Camera camera(vec3(12, 75, 84) - vec3(1024.0f / 20), vec3(0, 1, 0), -40, -55);
-	//game.camera = camera;
-	game.camera.movementSpeed *= 100;
+	game.camera.movementSpeed *= 10;
 
 	// camera keyframes
 	CameraKeyframe f1;
@@ -71,11 +70,18 @@ int main(int argc, char* args[])
 	model = translate(model, vec3(-1024.0f / 4, 5.0f, -1024.0f / 4));
 	model = scale(model, vec3(0.5));
 	water->model = model;
+
+	//shared_ptr<ComplexModel> castle(new ComplexModel("./models/nanosuit/nanosuit.obj"));
+	shared_ptr<ComplexModel> castle(new ComplexModel("./models/castle/Castle OBJ.obj"));
+	model = mat4(1);
+	model = translate(model, vec3(-1024.0f / 4, 5.0f, -1024.0f / 4));
+	castle->model = model;
 	
 	shared_ptr<World> world(new World());
+	world->models.push_back(castle);
 	world->models.push_back(terrain);
-	world->models.push_back(water);
-	world->models.push_back(skybox);
+	//world->models.push_back(water);
+	//world->models.push_back(skybox);
 
 	game.world = world;
 	game.loop();

@@ -8,8 +8,9 @@
 
 #include "ComplexMesh.h"
 #include "Shader.h"
+#include "Model.h"
 
-class ComplexModel
+class ComplexModel : public Model
 {
 public:
 	/*  Model Data */
@@ -24,7 +25,7 @@ public:
 	virtual ~ComplexModel();
 
 	// draws the model, and thus all its meshes
-	void draw(Shader& shader);
+	virtual void render(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& camera);
 
 private:
 	/*  Functions   */

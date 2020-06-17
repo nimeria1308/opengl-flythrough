@@ -13,7 +13,7 @@ Model::Model()
 {
 }
 
-void Model::render(const mat4& view, const mat4& proj)
+void Model::render(const mat4& view, const mat4& proj, const vec3& camera)
 {
 	shader->use();
 

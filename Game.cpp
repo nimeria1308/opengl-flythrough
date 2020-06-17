@@ -86,6 +86,8 @@ void Game::init()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //other modes GL_FILL, GL_POINT
 
 }
 
@@ -193,5 +195,5 @@ void Game::render(float deltaTime)
 
 	mat4 view = camera.getViewMatrix();
 	mat4 proj = glm::perspective(radians(camera.zoom), ratio, 0.1f, 10000.0f);
-	world->render(view, proj);
+	world->render(view, proj, camera.position);
 }

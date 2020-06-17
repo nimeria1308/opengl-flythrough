@@ -77,9 +77,9 @@ void BoxModel::init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void BoxModel::render(const glm::mat4& view, const glm::mat4& proj)
+void BoxModel::render(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& camera)
 {
-	Model::render(view, proj);
+	Model::render(view, proj, camera);
 
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 36);

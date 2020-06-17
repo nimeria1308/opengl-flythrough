@@ -11,7 +11,7 @@ class Model : public IRenderable {
 public:
 	Model();
 	virtual ~Model() { }
-	virtual void render(const glm::mat4& view, const glm::mat4& proj);
+	virtual void render(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& camera);
 	virtual void update(float deltaTime) { }
 	glm::mat4 model;
 
