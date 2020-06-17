@@ -19,21 +19,27 @@ int main(int argc, char* args[])
 	CameraKeyframe f1;
 	CameraKeyframe f2;
 	CameraKeyframe f3;
+	CameraKeyframe f4;
 
 	f1.position = vec3(0, 50, -50);
 	f1.yaw = 10;
 	f1.pitch = -45;
 	f1.duration = 100;
 
-	f2.position = vec3(-5, 20, 0);
+	f2.position = vec3(-30, 15, -20);
 	f2.yaw = 50;
 	f2.pitch = -20;
 	f2.duration = 70;
 
-	f3.position = vec3(-30, 25, 10);
-	f3.yaw = 10;
-	f3.pitch = -10;
-	f3.duration = 100;
+	f3.position = vec3(-5, 20, 0) + vec3(30, 0, 20);
+	f3.yaw = 50;
+	f3.pitch = -20;
+	f3.duration = 70;
+
+	f4.position = vec3(-30, 25, 10);
+	f4.yaw = 10;
+	f4.pitch = -10;
+	f4.duration = 100;
 
 	game.animator.keyFrames.push_back(f1);
 	game.animator.keyFrames.push_back(f2);
@@ -74,14 +80,17 @@ int main(int argc, char* args[])
 	//shared_ptr<ComplexModel> castle(new ComplexModel("./models/nanosuit/nanosuit.obj"));
 	shared_ptr<ComplexModel> castle(new ComplexModel("./models/castle/Castle OBJ.obj"));
 	model = mat4(1);
-	model = translate(model, vec3(-1024.0f / 4, 5.0f, -1024.0f / 4));
+	//model = translate(model, vec3(-1024.0f / 4, 5.0f, -1024.0f / 4));
+	model = scale(model, vec3(0.1));
+	model = translate(model, vec3(160, 100, -100));
+	model = rotate(model, -90.0f, vec3(0, 1, 0));
 	castle->model = model;
 	
 	shared_ptr<World> world(new World());
 	world->models.push_back(castle);
 	world->models.push_back(terrain);
-	//world->models.push_back(water);
-	//world->models.push_back(skybox);
+	world->models.push_back(water);
+	world->models.push_back(skybox);
 
 	game.world = world;
 	game.loop();

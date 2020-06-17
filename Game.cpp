@@ -101,6 +101,7 @@ void Game::loop()
 	// timing
 	float lastFrame = 0;
 	float deltaTime;
+	bool manualCamera = false;
 
 	while (true)
 	{
@@ -175,21 +176,31 @@ void Game::loop()
 			case SDL_MOUSEWHEEL:
 				camera.processMouseScroll(e.wheel.y);
 				break;
+
+			case SDL_MOUSEBUTTONUP:
+				if (e.button.clicks == 1 && e.button.button == SDL_BUTTON_LEFT)
+				{
+					manualCamera = !manualCamera;
+				}
+				break;
 			}
 		}
 
 		//Render
-		render(deltaTime);
+		render(deltaTime, manualCamera);
 
 		//Update screen
 		SDL_GL_SwapWindow(window);
 	}
 }
 
-void Game::render(float deltaTime)
+void Game::render(float deltaTime, bool manualCamera)
 {
 	world->update(deltaTime);
-	animator.updateCamera(camera, deltaTime);
+
+	if (!manualCamera) {
+		animator.updateCamera(camera, deltaTime);
+	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

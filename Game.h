@@ -21,7 +21,7 @@ public:
 
 protected:
 	void init();
-	void render(float deltaTime);
+	void render(float deltaTime, bool manualCamera);
 
 	// window and GL
 	SDL_Window* window;
