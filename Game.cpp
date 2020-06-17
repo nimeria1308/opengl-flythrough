@@ -1,12 +1,17 @@
-#include "Game.h"
+#define GLEW_STATIC
+#include <GL/glew.h>
 
 #include <iostream>
+#include <glm/glm.hpp>
+
+#include "Game.h"
 
 using namespace std;
+using namespace glm;
 
 Game::Game(int width, int height)
 	: window(NULL), context(NULL),
-	width(width), height(height)
+	width(width), height(height), ratio((float)width / height)
 {
 	init();
 }
@@ -66,6 +71,22 @@ void Game::init()
 	{
 		cerr << "Warning: Unable to set VSync: " << SDL_GetError() << endl;
 	}
+
+	//Init GL
+	glewInit();
+	GLenum gl_error = glGetError();
+	if (gl_error != GL_NO_ERROR)
+	{
+		cerr << "Error initializing OpenGL: " << gl_error << endl;
+		abort();
+	}
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 void Game::loop()
@@ -153,17 +174,23 @@ void Game::loop()
 				camera.processMouseScroll(e.wheel.y);
 				break;
 			}
-
-			//Render
-			render(deltaTime);
-
-			//Update screen
-			SDL_GL_SwapWindow(window);
 		}
+
+		//Render
+		render(deltaTime);
+
+		//Update screen
+		SDL_GL_SwapWindow(window);
 	}
 }
 
 void Game::render(float deltaTime)
 {
+	world->update(deltaTime);
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	mat4 view = camera.getViewMatrix();
+	mat4 proj = glm::perspective(radians(camera.zoom), ratio, 0.1f, 1000.0f);
+	world->render(view, proj);
 }

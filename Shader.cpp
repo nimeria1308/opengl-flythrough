@@ -187,7 +187,7 @@ void Shader::setMat4(const string& name, const mat4& mat) const
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-void Shader::checkCompileErrors(GLuint shader, const string& type)
+void Shader::checkCompileErrors(unsigned int shader, const string& type)
 {
 	GLint success;
 	GLchar infoLog[1024];

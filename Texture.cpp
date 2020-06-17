@@ -13,6 +13,11 @@ Texture::~Texture()
 	glDeleteTextures(1, &ID);
 }
 
+void Texture::bind()
+{
+	glBindTexture(type, ID);
+}
+
 static GLenum channelsToFormat(int channels)
 {
 	switch (channels)
@@ -32,15 +37,14 @@ shared_ptr<Texture> Texture::create2D(const string& filename, bool verticalFlip)
 {
 	GLuint ID;
 	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
+	shared_ptr<Texture> texture(new Texture(ID, GL_TEXTURE_2D));
+	texture->bind();
 
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); //these are the default values for warping
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	shared_ptr<Texture> texture(new Texture(ID));
 
 	// read the texture
 	Image image(filename, verticalFlip);
@@ -52,13 +56,13 @@ shared_ptr<Texture> Texture::create2D(const string& filename, bool verticalFlip)
 	return texture;
 }
 
-std::shared_ptr<Texture> Texture::createCubemap(std::vector<std::string>& faces, bool verticalFlip)
+std::shared_ptr<Texture> Texture::createCubemap(const std::vector<std::string>& faces, bool verticalFlip)
 {
 	GLuint ID;
 	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
 
-	shared_ptr<Texture> texture(new Texture(ID));
+	shared_ptr<Texture> texture(new Texture(ID, GL_TEXTURE_CUBE_MAP));
+	texture->bind();
 
 	for (unsigned int i = 0; i < faces.size(); i++)
 	{
