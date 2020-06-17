@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="BoxModel.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraAnimator.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ComplexMesh.h" />
     <ClInclude Include="ComplexModel.h" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxModel.cpp" />
+    <ClCompile Include="CameraAnimator.cpp" />
     <ClCompile Include="ComplexMesh.cpp" />
     <ClCompile Include="ComplexModel.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -168,8 +170,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PlaneModel.cpp" />
-    <ClCompile Include="SDL_OGL_Heightmap.cpp" />
-    <ClCompile Include="SDL_OGL_ModelLoading.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkyboxModel.cpp" />

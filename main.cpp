@@ -12,9 +12,27 @@ using namespace glm;
 int main(int argc, char* args[])
 {
 	Game game(1280, 720);
-	Camera camera(vec3(12, 75, 84) - vec3(1024.0f / 20), vec3(0, 1, 0), -40, -55);
-	game.camera = camera;
+	//Camera camera(vec3(12, 75, 84) - vec3(1024.0f / 20), vec3(0, 1, 0), -40, -55);
+	//game.camera = camera;
 	game.camera.movementSpeed *= 100;
+
+	// camera keyframes
+	// pitch + up
+	CameraKeyframe f1;
+	CameraKeyframe f2;
+
+	f1.position = vec3(0, 10, -20);
+	f1.yaw = 0;
+	f1.pitch = 0;
+	f1.duration = 40;
+
+	f2.position = vec3(20, 50, 50);
+	f2.yaw = 50;
+	f2.pitch = 0;
+	f2.duration = 0.1;
+	game.animator.keyFrames.push_back(f1);
+	game.animator.keyFrames.push_back(f2);
+
 
 	mat4 model;
 

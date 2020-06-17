@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Camera.h"
+#include "CameraAnimator.h"
 #include "World.h"
 
 class Game
@@ -16,6 +17,7 @@ public:
 	std::shared_ptr<World> world;
 
 	Camera camera;
+	CameraAnimator animator;
 
 protected:
 	void init();
