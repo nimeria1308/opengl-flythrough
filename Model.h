@@ -12,6 +12,7 @@ public:
 	Model();
 	virtual ~Model() { }
 	virtual void render(const glm::mat4& view, const glm::mat4& proj);
+	virtual void update(float deltaTime) { }
 	glm::mat4 model;
 
 protected:

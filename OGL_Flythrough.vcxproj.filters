@@ -63,6 +63,9 @@
     <ClInclude Include="SkyboxModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WaterModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDL_OGL_ModelLoading.cpp">
@@ -113,6 +116,9 @@
     <ClCompile Include="SkyboxModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WaterModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -138,6 +144,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="shaders\skybox.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\water.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\water.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

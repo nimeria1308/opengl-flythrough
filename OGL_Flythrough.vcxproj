@@ -155,6 +155,7 @@
     <ClInclude Include="SkyboxModel.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="WaterModel.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkyboxModel.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="WaterModel.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +187,8 @@
     <None Include="shaders\model.vert" />
     <None Include="shaders\skybox.frag" />
     <None Include="shaders\skybox.vert" />
+    <None Include="shaders\water.frag" />
+    <None Include="shaders\water.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

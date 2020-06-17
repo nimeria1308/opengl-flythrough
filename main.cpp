@@ -4,6 +4,7 @@
 #include "World.h"
 #include "HeightmapModel.h"
 #include "SkyboxModel.h"
+#include "WaterModel.h"
 
 using namespace std;
 using namespace glm;
@@ -12,8 +13,8 @@ int main(int argc, char* args[])
 {
 	Game game(1280, 720);
 	Camera camera(vec3(12, 75, 84) - vec3(1024.0f / 20), vec3(0, 1, 0), -40, -55);
-	camera.movementSpeed *= 100;
 	game.camera = camera;
+	game.camera.movementSpeed *= 100;
 
 	mat4 model;
 
@@ -22,7 +23,8 @@ int main(int argc, char* args[])
 
 	model = mat4(1);
 	model = translate(model, vec3(-1024.0f / 20, 0, -1024.0f / 20));
-	terrain->model = scale(model, vec3(0.1));
+	model = scale(model, vec3(0.1));
+	terrain->model = model;
 
 	std::vector<std::string> faces =
 	{
@@ -39,8 +41,15 @@ int main(int argc, char* args[])
 	model = scale(model, vec3(1024.0f / 20));
 	skybox->model = model;
 
+	shared_ptr<WaterModel> water(new WaterModel(1024, 1024));
+	model = mat4(1);
+	model = translate(model, vec3(-1024.0f / 20, 0, -1024.0f / 20));
+	model = scale(model, vec3(0.5));
+	water->model = model;
+	
 	shared_ptr<World> world(new World());
 	world->models.push_back(terrain);
+	world->models.push_back(water);
 	world->models.push_back(skybox);
 
 	game.world = world;
