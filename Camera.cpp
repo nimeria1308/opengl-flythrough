@@ -84,7 +84,7 @@ void Camera::processMouseScroll(float yoffset)
 void Camera::updateCameraVectors()
 {
 	// Calculate the new Front vector
-	vec3 front;
+	front = vec3();
 	front.x = cos(radians(yaw)) * cos(radians(pitch));
 	front.y = sin(radians(pitch));
 	front.z = sin(radians(yaw)) * cos(radians(pitch));
