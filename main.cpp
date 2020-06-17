@@ -38,12 +38,12 @@ int main(int argc, char* args[])
 
 	shared_ptr<SkyboxModel> skybox(new SkyboxModel(faces));
 	model = mat4(1);
-	model = scale(model, vec3(1024.0f / 20));
+	model = scale(model, vec3(1024.0f / 4));
 	skybox->model = model;
 
 	shared_ptr<WaterModel> water(new WaterModel(1024, 1024));
 	model = mat4(1);
-	model = translate(model, vec3(-1024.0f / 20, 0, -1024.0f / 20));
+	model = translate(model, vec3(-1024.0f / 4, 4.3f, -1024.0f / 4));
 	model = scale(model, vec3(0.5));
 	water->model = model;
 	

@@ -29,7 +29,7 @@ void WaterModel::init()
 
 void WaterModel::update(float deltaTime)
 {
-	t += deltaTime;
+	t += (deltaTime / 10);
 	shader->use();
 	shader->setFloat("time", t);
 }

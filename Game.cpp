@@ -191,6 +191,6 @@ void Game::render(float deltaTime)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mat4 view = camera.getViewMatrix();
-	mat4 proj = glm::perspective(radians(camera.zoom), ratio, 0.1f, 1000.0f);
+	mat4 proj = glm::perspective(radians(camera.zoom), ratio, 0.1f, 10000.0f);
 	world->render(view, proj);
 }
