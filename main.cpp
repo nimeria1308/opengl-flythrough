@@ -17,21 +17,28 @@ int main(int argc, char* args[])
 	game.camera.movementSpeed *= 100;
 
 	// camera keyframes
-	// pitch + up
 	CameraKeyframe f1;
 	CameraKeyframe f2;
+	CameraKeyframe f3;
 
-	f1.position = vec3(0, 10, -20);
-	f1.yaw = 0;
-	f1.pitch = 0;
-	f1.duration = 40;
+	f1.position = vec3(0, 50, -50);
+	f1.yaw = 10;
+	f1.pitch = -45;
+	f1.duration = 100;
 
-	f2.position = vec3(20, 50, 50);
+	f2.position = vec3(-5, 20, 0);
 	f2.yaw = 50;
-	f2.pitch = 0;
-	f2.duration = 0.1;
+	f2.pitch = -20;
+	f2.duration = 70;
+
+	f3.position = vec3(-30, 25, 10);
+	f3.yaw = 10;
+	f3.pitch = -10;
+	f3.duration = 100;
+
 	game.animator.keyFrames.push_back(f1);
 	game.animator.keyFrames.push_back(f2);
+	game.animator.keyFrames.push_back(f3);
 
 
 	mat4 model;
@@ -61,7 +68,7 @@ int main(int argc, char* args[])
 
 	shared_ptr<WaterModel> water(new WaterModel(1024, 1024));
 	model = mat4(1);
-	model = translate(model, vec3(-1024.0f / 4, 4.3f, -1024.0f / 4));
+	model = translate(model, vec3(-1024.0f / 4, 5.0f, -1024.0f / 4));
 	model = scale(model, vec3(0.5));
 	water->model = model;
 	
